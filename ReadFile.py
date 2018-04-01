@@ -31,9 +31,8 @@ df = model.freqItemsets
 
 df = df.withColumn('length', size(df.items))
 df = df.orderBy(df.length.desc(), df.freq.desc()).select('items', 'freq')
-# df.show()
-for i in df:
-    print(i)
+df.show(n=1000)
+
 
 # df = df.select(df.items.cast('array').alias('item'))
 # fpGrowth = FPGrowth(itemsCol="items", minSupport=0.05, minConfidence=0.1)
