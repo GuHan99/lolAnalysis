@@ -24,7 +24,7 @@ d_frame = d_split.map(lambda x: Row(id=x[0], items=x[11:]))
 spark = SparkSession.builder.appName('data').getOrCreate()
 df = spark.createDataFrame(d_frame)
 
-fpGrowth = FPGrowth(itemsCol='items', minSupport=0.2, minConfidence=0.2)
+fpGrowth = FPGrowth(itemsCol='items', minSupport=0.00001)
 model = fpGrowth.fit(df)
 
 df = model.freqItemsets
