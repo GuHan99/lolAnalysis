@@ -17,9 +17,9 @@ df = spark.read.csv('games.csv', header=True)
 merge_udf = udf(merge)
 
 df_1 = df.select(merge_udf("t1_champ1id", "t1_champ2id", "t1_champ3id", "t1_champ4id", "t1_champ5id"))
-df_1 = df_1.selectExpr('merge(t1_champ1id, t1_champ2id, t1_champ3id, t1_champ4id, t1_champ5id) as list')
+df_1 = df_1.withColumnRenamed('merge(t1_champ1id, t1_champ2id, t1_champ3id, t1_champ4id, t1_champ5id)', 'list_1')
 df_2 = df.select(merge_udf("t2_champ1id", "t2_champ2id", "t2_champ3id", "t2_champ4id", "t2_champ5id"))
-df_2 = df_2.selectExpr('merge(t2_champ1id, t2_champ2id, t2_champ3id, t2_champ4id, t2_champ5id) as list_2')
+df_2 = df_2.withColumnRenamed('merge(t2_champ1id, t2_champ2id, t2_champ3id, t2_champ4id, t2_champ5id)', 'list_2')
 
 df_1.show()
 df_2.show()
