@@ -1,6 +1,7 @@
 from pyspark.ml.fpm import FPGrowth
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, size
+from pyspark.sql.types import ArrayType, StringType
 
 
 def merge(*c):
@@ -14,7 +15,7 @@ def merge(*c):
 spark = SparkSession.builder.appName('data').getOrCreate()
 df = spark.read.csv('games.csv', header=True)
 
-merge_udf = udf(merge)
+merge_udf = udf(merge, ArrayType(StringType()))
 
 df_1 = df.select(merge_udf("t1_champ1id", "t1_champ2id", "t1_champ3id", "t1_champ4id", "t1_champ5id"))
 df_1 = df_1.withColumnRenamed('merge(t1_champ1id, t1_champ2id, t1_champ3id, t1_champ4id, t1_champ5id)', 'list_1')
