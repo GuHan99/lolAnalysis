@@ -1,7 +1,8 @@
 from pyspark.ml.fpm import FPGrowth
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, Row
 from pyspark.sql.functions import udf, size
 from pyspark.sql.types import ArrayType, StringType
+from pyspark import SparkContext, SparkConf
 
 
 def merge(*c):
@@ -12,25 +13,26 @@ def merge(*c):
         return "[{0}]".format(",".join(merged))
 
 
+conf = SparkConf().set("local", "false")
+sc = SparkContext(appName="PythonStatusAPIDemo", conf=conf)
+
+rdd = sc.textFile('games copy.csv')
+
+d_split = rdd.map(lambda x:x.split(','))
+d_frame = d_split.map(lambda x: Row(id=x[0], items=x[11:]))
+
 spark = SparkSession.builder.appName('data').getOrCreate()
-df = spark.read.csv('games.csv', header=True)
+df = spark.createDataFrame(d_frame)
 
-merge_udf = udf(merge, ArrayType(StringType()))
+fpGrowth = FPGrowth(itemsCol='items', minSupport=0.2, minConfidence=0.2)
+model = fpGrowth.fit(df)
 
-df_1 = df.select(merge_udf("t1_champ1id", "t1_champ2id", "t1_champ3id", "t1_champ4id", "t1_champ5id"))
-df_1 = df_1.withColumnRenamed('merge(t1_champ1id, t1_champ2id, t1_champ3id, t1_champ4id, t1_champ5id)', 'list_1')
-df_2 = df.select(merge_udf("t2_champ1id", "t2_champ2id", "t2_champ3id", "t2_champ4id", "t2_champ5id"))
-df_2 = df_2.withColumnRenamed('merge(t2_champ1id, t2_champ2id, t2_champ3id, t2_champ4id, t2_champ5id)', 'list_2')
+df = model.freqItemsets
 
-df_1 = df_1.union(df_2)
+df = df.withColumn('length', size(df.items))
+df = df.orderBy(df.length.desc(), df.freq.desc()).select('items', 'freq')
+df.show()
 
-df = df_1
-
-df = df.withColumnRenamed('list_1', 'items')
-
-model = FPGrowth(itemsCol='items', minSupport=0.000001)
-fpm = model.fit(df)
-result = fpm.freqItemsets.show()
 
 # df = df.select(df.items.cast('array').alias('item'))
 # fpGrowth = FPGrowth(itemsCol="items", minSupport=0.05, minConfidence=0.1)
