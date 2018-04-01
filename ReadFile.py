@@ -26,8 +26,8 @@ df_1 = df_1.union(df_2)
 df = df_1
 
 df = df.withColumnRenamed('list_1', 'items')
-df = df.select(df.items.cast('array').alias('item'))
-fpGrowth = FPGrowth(itemsCol="item", minSupport=0.2, minConfidence=0.6)
+# df = df.select(df.items.cast('array').alias('item'))
+fpGrowth = FPGrowth(itemsCol="items", minSupport=0.2, minConfidence=0.6)
 model = fpGrowth.fit(df)
 
 df = model.freqItemsets
