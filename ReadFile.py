@@ -29,7 +29,7 @@ df = df_1
 df = df.withColumnRenamed('list_1', 'items')
 print(df.dtypes)
 # df = df.select(df.items.cast('array').alias('item'))
-fpGrowth = FPGrowth(itemsCol="items", minSupport=0.2, minConfidence=0.6)
+fpGrowth = FPGrowth(itemsCol="items", minSupport=0.05, minConfidence=0.1)
 model = fpGrowth.fit(df)
 
 df = model.freqItemsets
