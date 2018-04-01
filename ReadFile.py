@@ -28,11 +28,10 @@ df = df_1
 
 df = df.withColumnRenamed('list_1', 'items')
 
-model = FPGrowth(itemsCol='items', minSupport=0.01, minConfidence=0.1)
+model = FPGrowth(itemsCol='items', minSupport=0.1)
 fpm = model.fit(df)
-result = fpm.freqItemsets
-for fi in result:
-    print(fi)
+result = fpm.freqItemsets.show()
+
 # df = df.select(df.items.cast('array').alias('item'))
 # fpGrowth = FPGrowth(itemsCol="items", minSupport=0.05, minConfidence=0.1)
 # model = fpGrowth.fit(df)
