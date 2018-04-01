@@ -24,14 +24,14 @@ d_frame = d_split.map(lambda x: Row(id=x[0], items=x[11:]))
 spark = SparkSession.builder.appName('data').getOrCreate()
 df = spark.createDataFrame(d_frame)
 
-fpGrowth = FPGrowth(itemsCol='items', minSupport=0.00001)
+fpGrowth = FPGrowth(itemsCol='items', minSupport=0.001)
 model = fpGrowth.fit(df)
 
 df = model.freqItemsets
 
 df = df.withColumn('length', size(df.items))
 df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq')
-df.show(n=1000)
+df.show(n=100)
 
 
 # df = df.select(df.items.cast('array').alias('item'))
