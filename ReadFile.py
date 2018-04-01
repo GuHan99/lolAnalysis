@@ -1,6 +1,6 @@
 from pyspark.ml.fpm import FPGrowth
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import udf, size, monotonically_increasing_id
+from pyspark.sql.functions import udf, size
 
 
 def merge(*c):
@@ -24,10 +24,10 @@ df_2 = df_2.withColumnRenamed('merge(t2_champ1id, t2_champ2id, t2_champ3id, t2_c
 df_1 = df_1.union(df_2)
 
 df = df_1
-df = df.withColumn("id", monotonically_increasing_id())
 
-df = df.select('id', 'list_1')
-fpGrowth = FPGrowth(itemsCol="list_1", minSupport=0.2, minConfidence=0.6)
+df = df.withColumnRenamed('list_1', 'items')
+df = df.select(df.items.cast('array').alias('item'))
+fpGrowth = FPGrowth(itemsCol="item", minSupport=0.2, minConfidence=0.6)
 model = fpGrowth.fit(df)
 
 df = model.freqItemsets
