@@ -21,12 +21,9 @@ df_1 = df_1.withColumnRenamed('merge(t1_champ1id, t1_champ2id, t1_champ3id, t1_c
 df_2 = df.select(merge_udf("t2_champ1id", "t2_champ2id", "t2_champ3id", "t2_champ4id", "t2_champ5id"))
 df_2 = df_2.withColumnRenamed('merge(t2_champ1id, t2_champ2id, t2_champ3id, t2_champ4id, t2_champ5id)', 'list_2')
 
-print(df_1.count())
-print(df_2.count())
-
 df_1 = df_1.union(df_2)
-print(df_1.count())
 
+df_1.show()
 # fpGrowth = FPGrowth(itemsCol="items", minSupport=0.5, minConfidence=0.6)
 # model = fpGrowth.fit(df)
 #
