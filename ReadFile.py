@@ -28,7 +28,7 @@ df = df_1
 
 df = df.withColumnRenamed('list_1', 'items').rdd
 
-model = FPGrowth.train(df, minSupport=0.2, minConfidence=0.6)
+model = FPGrowth.train(df, minSupport=0.2)
 result = model.freqItemsets().collect()
 for fi in result:
     print(fi)
