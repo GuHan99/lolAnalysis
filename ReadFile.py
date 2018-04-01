@@ -28,7 +28,7 @@ df = df_1
 
 df = df.withColumnRenamed('list_1', 'items')
 
-model = FPGrowth(itemsCol='items', minSupport=0.1)
+model = FPGrowth(itemsCol='items', minSupport=0.000001)
 fpm = model.fit(df)
 result = fpm.freqItemsets.show()
 
