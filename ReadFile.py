@@ -26,14 +26,18 @@ df_1 = df_1.union(df_2)
 
 df = df_1
 
-df = df.withColumnRenamed('list_1', 'items')
-print(df.dtypes)
+df = df.withColumnRenamed('list_1', 'items').rdd
+
+model = FPGrowth.train(df, minSupport=0.2, numPartitions=10, minConfidence=0.6)
+result = model.freqItemsets().collect()
+for fi in result:
+    print(fi)
 # df = df.select(df.items.cast('array').alias('item'))
-fpGrowth = FPGrowth(itemsCol="items", minSupport=0.05, minConfidence=0.1)
-model = fpGrowth.fit(df)
-
-df = model.freqItemsets
-df = df.withColumn('length', size(df['items']))
-df = df.orderBy(df.freq.desc(), df.length.desc()).select('items', 'freq')
-
-df = df.show()
+# fpGrowth = FPGrowth(itemsCol="items", minSupport=0.05, minConfidence=0.1)
+# model = fpGrowth.fit(df)
+#
+# df = model.freqItemsets
+# df = df.withColumn('length', size(df['items']))
+# df = df.orderBy(df.freq.desc(), df.length.desc()).select('items', 'freq')
+#
+# df = df.show()
