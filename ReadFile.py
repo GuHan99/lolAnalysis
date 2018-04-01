@@ -34,6 +34,6 @@ model = fpGrowth.fit(df)
 
 df = model.freqItemsets
 df = df.withColumn('length', size(df['list_1']))
-df = df.orderBy(df.freq.desc(), df.length.desc()).select('list_1', 'freq')
+df = df.orderBy(df.freq.desc(), df.length.desc()).select('items', 'freq')
 
 df = df.show()
