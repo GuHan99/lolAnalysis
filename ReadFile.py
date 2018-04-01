@@ -1,4 +1,4 @@
-from pyspark.ml.fpm import FPGrowth
+from pyspark.ml.fpm import FPGrowthModel, FPGrowth
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, size
 from pyspark.sql.types import ArrayType, StringType
@@ -28,8 +28,9 @@ df = df_1
 
 df = df.withColumnRenamed('list_1', 'items').rdd
 
-model = FPGrowth.train(df, minSupport=0.2, numPartitions=10, minConfidence=0.6)
-result = model.freqItemsets().collect()
+model = FPGrowth(minSupport=0.2, minConfidence=0.6)
+fpm = model.fit(df)
+result = fpm.freqItemsets().collect()
 for fi in result:
     print(fi)
 # df = df.select(df.items.cast('array').alias('item'))
