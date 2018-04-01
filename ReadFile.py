@@ -1,6 +1,6 @@
 from pyspark.ml.fpm import FPGrowth
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import udf
+from pyspark.sql.functions import udf, size
 
 
 def merge(*c):
@@ -23,16 +23,12 @@ df_2 = df_2.withColumnRenamed('merge(t2_champ1id, t2_champ2id, t2_champ3id, t2_c
 
 df_1 = df_1.union(df_2)
 
-df_1.show()
-# fpGrowth = FPGrowth(itemsCol="items", minSupport=0.5, minConfidence=0.6)
-# model = fpGrowth.fit(df)
-#
-# # Display frequent itemsets.
-# model.freqItemsets.show()
-#
-# # Display generated association rules.
-# model.associationRules.show()
-#
-# # transform examines the input items against all the association rules and summarize the
-# # consequents as prediction
-# model.transform(df).show()
+df = df_1
+fpGrowth = FPGrowth(itemsCol="list_1", minSupport=0.2, minConfidence=0.6)
+model = fpGrowth.fit(df)
+
+df = model.freqItemsets
+df = df.withColumn('length', size(df['list_1']))
+df = df.orderBy(df.freq.desc(), df.length.desc()).select('list_1', 'freq')
+
+df = df.show()
