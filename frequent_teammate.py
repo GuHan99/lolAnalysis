@@ -25,9 +25,8 @@ model = fpGrowth.fit(df)
 df = model.freqItemsets
 
 df = df.withColumn('length', size(df.items))
-df = df.filter(df.length > 1)
-df = df.filter(df.freq > 200)
-df = df.filter(df.length == 2 & df.freq > 1000)
+df = df.filter(df.length == 2)
+df = df.filter(df.freq > 1000)
 df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq').collect()
 for i in df:
     print(i)
