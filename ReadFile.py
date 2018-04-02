@@ -25,16 +25,7 @@ model = fpGrowth.fit(df)
 df = model.freqItemsets
 
 df = df.withColumn('length', size(df.items))
-df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq')
-df.show(n=5000)
+df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq').collect()
+for i in df:
+    print(i)
 
-
-# df = df.select(df.items.cast('array').alias('item'))
-# fpGrowth = FPGrowth(itemsCol="items", minSupport=0.05, minConfidence=0.1)
-# model = fpGrowth.fit(df)
-#
-# df = model.freqItemsets
-# df = df.withColumn('length', size(df['items']))
-# df = df.orderBy(df.freq.desc(), df.length.desc()).select('items', 'freq')
-#
-# df = df.show()
