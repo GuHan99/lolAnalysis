@@ -27,20 +27,23 @@ d_split = rdd.map(lambda x: x.split(','))
 d_split = d_split.map(lambda x: mark(x))
 d_frame = d_split.map(lambda x: Row(id=x[0], items=slice_cham(x))).collect()
 
-print(d_frame[10])
-# spark = SparkSession.builder.appName('data').getOrCreate()
-# df_1 = spark.createDataFrame(d_frame)
-# df_2 = spark.createDataFrame(d_frame_2)
-#
-# df = df_1.union(df_2)
-#
-# fpGrowth = FPGrowth(itemsCol='items', minSupport=0.001)
-# model = fpGrowth.fit(df)
-#
-# df = model.freqItemsets
-#
-# df = df.withColumn('length', size(df.items))
-# df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq').collect()
-# for i in df:
-#     print(i)
+spark = SparkSession.builder.appName('data').getOrCreate()
+df = spark.createDataFrame(d_frame)
 
+fpGrowth = FPGrowth(itemsCol='items', minSupport=0.001, minConfidence=0.1)
+model = fpGrowth.fit(df)
+
+df = model.freqItemsets
+
+df = df.withColumn('length', size(df.items))
+df = df.filter(df.length == 2)
+df = df.filter(df.freq > 1000)
+df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq').collect()
+for i in df:
+    print(i)
+
+rules = model.associationRules
+
+rules = rules.withColumn('length', size(rules.antecedent))
+rules = rules.orderBy(rules.length.desc(), rules.confidence.desc()).select('antecedent', 'consequent', 'confidence')
+rules.show()
