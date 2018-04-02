@@ -1,28 +1,23 @@
 from pyspark.ml.fpm import FPGrowth
 from pyspark.sql import SparkSession, Row
 from pyspark.sql.functions import udf, size
-from pyspark.sql.types import ArrayType, StringType
 from pyspark import SparkContext, SparkConf
-
-
-def merge(*c):
-    merged = sorted(set(c))
-    if len(merged) == 1:
-        return merged[0]
-    else:
-        return "[{0}]".format(",".join(merged))
 
 
 conf = SparkConf().set("local", "false")
 sc = SparkContext(appName="PythonStatusAPIDemo", conf=conf)
 
-rdd = sc.textFile('games copy.csv')
+rdd = sc.textFile('games.csv')
 
 d_split = rdd.map(lambda x:x.split(','))
-d_frame = d_split.map(lambda x: Row(id=x[0], items=x[11:]))
+d_frame = d_split.map(lambda x: Row(id=x[0], items=x[11:30][:15:3]))
+d_frame_2 = d_split.map(lambda x: Row(id=x[0], items=x[36:50][:15:3]))
 
 spark = SparkSession.builder.appName('data').getOrCreate()
-df = spark.createDataFrame(d_frame)
+df_1 = spark.createDataFrame(d_frame)
+df_2 = spark.createDataFrame(d_frame_2)
+
+df = df_1.union(df_2)
 
 fpGrowth = FPGrowth(itemsCol='items', minSupport=0.01)
 model = fpGrowth.fit(df)
