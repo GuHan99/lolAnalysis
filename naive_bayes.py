@@ -15,9 +15,11 @@ def features_csv(x):
 
 
 spark = SparkSession.builder.master('local').appName('data').getOrCreate()
-data = spark.read.csv('games.csv', header=True)
+data = spark.read.csv('games.csv', header=True).rdd
 
 data = data.map(lambda x: Row(labels=x[4], features=Vectors.dense(features_csv(x))))
+
+data = spark.createDataFrame(data)
 
 # Split the data into train and test
 splits = data.randomSplit([0.6, 0.4], 1234)
