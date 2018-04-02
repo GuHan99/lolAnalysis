@@ -26,7 +26,7 @@ df = model.freqItemsets
 
 df = df.withColumn('length', size(df.items))
 df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq')
-df.show(n=1000)
+df.show(n=5000)
 
 
 # df = df.select(df.items.cast('array').alias('item'))
