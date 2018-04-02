@@ -6,11 +6,11 @@ from pyspark.ml.linalg import Vectors
 
 def features_csv(x):
     result = x[5:11]
-    result = result.append(x[51] - x[26])
-    result = result.append(x[52] - x[27])
-    result = result.append(x[53] - x[28])
-    result = result.append(x[54] - x[29])
-    result = result.append(x[55] - x[30])
+    # result = result.append(x[51] - x[26])
+    # result = result.append(x[52] - x[27])
+    # result = result.append(x[53] - x[28])
+    # result = result.append(x[54] - x[29])
+    # result = result.append(x[55] - x[30])
     return result
 
 
