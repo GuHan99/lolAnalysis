@@ -19,7 +19,7 @@ df_2 = spark.createDataFrame(d_frame_2)
 
 df = df_1.union(df_2)
 
-fpGrowth = FPGrowth(itemsCol='items', minSupport=0.001)
+fpGrowth = FPGrowth(itemsCol='items', minSupport=0.001, minConfidence=0.5)
 model = fpGrowth.fit(df)
 
 df = model.freqItemsets
@@ -31,4 +31,9 @@ df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq').collect
 for i in df:
     print(i)
 
+rules = model.associationRules
+
+rules = rules.withColumn('length', size(rules.antecedent))
+rules = rules.orderBy(rules.length.desc(), rules.confidence.desc()).select('antecedent', 'consequent', 'confidence')
+rules.show()
 
