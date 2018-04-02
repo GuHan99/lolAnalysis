@@ -30,9 +30,9 @@ df = df.withColumnRenamed('list_1', 'items')
 
 model = FPGrowth(itemsCol='items', minSupport=0.00000001)
 fpm = model.fit(df)
-result = fpm.freqItemsets
+df = fpm.freqItemsets
 
-df = result.withColumn('length', size(df.items))
+df = df.withColumn('length', size(df.items))
 df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq')
 df.show(n=10000)
 
