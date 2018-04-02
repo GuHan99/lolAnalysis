@@ -1,6 +1,6 @@
 from pyspark.ml.fpm import FPGrowth
 from pyspark.sql import SparkSession, Row
-from pyspark.sql.functions import udf, size
+from pyspark.sql.functions import size
 from pyspark import SparkContext, SparkConf
 
 
@@ -9,7 +9,7 @@ sc = SparkContext(appName="PythonStatusAPIDemo", conf=conf)
 
 rdd = sc.textFile('games.csv')
 
-d_split = rdd.map(lambda x:x.split(','))
+d_split = rdd.map(lambda x: x.split(','))
 d_frame = d_split.map(lambda x: Row(id=x[0], items=x[11:30][:15:3]))
 d_frame_2 = d_split.map(lambda x: Row(id=x[0], items=x[36:50][:15:3]))
 
@@ -25,6 +25,7 @@ model = fpGrowth.fit(df)
 df = model.freqItemsets
 
 df = df.withColumn('length', size(df.items))
+df = df.filter(df.length > 1)
 df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq').collect()
 for i in df:
     print(i)
