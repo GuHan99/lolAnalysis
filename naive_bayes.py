@@ -1,9 +1,23 @@
 from pyspark.ml.classification import NaiveBayes
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, Row
+from pyspark.ml.linalg import Vectors
+
+
+def features_csv(x):
+    result = x[5:11]
+    result = result.append(x[51] - x[26])
+    result = result.append(x[52] - x[27])
+    result = result.append(x[53] - x[28])
+    result = result.append(x[54] - x[29])
+    result = result.append(x[55] - x[30])
+    return result
+
 
 spark = SparkSession.builder.master('local').appName('data').getOrCreate()
 data = spark.read.csv('games.csv', header=True)
+
+data = data.map(lambda x: Row(labels=x[4], features=Vectors.dense(features_csv(x))))
 
 # Split the data into train and test
 splits = data.randomSplit([0.6, 0.4], 1234)
