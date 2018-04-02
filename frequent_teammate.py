@@ -19,7 +19,7 @@ df_2 = spark.createDataFrame(d_frame_2)
 
 df = df_1.union(df_2)
 
-fpGrowth = FPGrowth(itemsCol='items', minSupport=0.001, minConfidence=0.5)
+fpGrowth = FPGrowth(itemsCol='items', minSupport=0.001, minConfidence=0.1)
 model = fpGrowth.fit(df)
 
 df = model.freqItemsets
