@@ -31,11 +31,12 @@ data_rdd = data_rdd.map(lambda x: Row(label=x[0], features=Vectors.dense([x[1], 
 
 data = spark.createDataFrame(data_rdd)
 
+data.show()
 # Split the data into train and test
-(train, test) = data.randomSplit([0.6, 0.4], 123)
+(train, test) = data.randomSplit([0.8, 0.2], 123)
 
-train.show()
-test.show()
+# train.show()
+# test.show()
 
 # create the trainer and set its parameters
 nb = NaiveBayes(smoothing=0.5, modelType="multinomial")
