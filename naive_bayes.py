@@ -3,11 +3,8 @@ from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 from pyspark.sql import SparkSession, Row
 from pyspark.ml.linalg import Vectors
 from pyspark.ml.feature import VectorAssembler
-from pyspark.sql.types import IntegerType
+from pyspark.sql.types import IntegerType, StringType
 from pyspark.sql.functions import monotonically_increasing_id, udf
-
-maturity_udf = udf(lambda x: x, IntegerType())
-
 
 spark = SparkSession.builder.master('local').appName('data').getOrCreate()
 data = spark.read.csv('games.csv', header=True)
@@ -19,7 +16,7 @@ data = data.withColumn('dragonkill', data.t1_dragonKills-data.t2_dragonKills+20)
 data = data.withColumn('riftkill', data.t1_riftHeraldKills-data.t2_riftHeraldKills+20)
 
 data = data.select(
-    data['winner'].cast(IntegerType()), data['firstBlood'].cast(IntegerType())
+    data['winner'].cast(StringType()), data['firstBlood'].cast(IntegerType())
     , data['firstTower'].cast(IntegerType())
     , data['firstInhibitor'].cast(IntegerType()), data['firstBaron'].cast(IntegerType())
     , data['firstDragon'].cast(IntegerType())
