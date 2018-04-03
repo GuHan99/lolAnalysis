@@ -3,7 +3,7 @@ from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 from pyspark.sql import SparkSession, Row
 from pyspark.ml.linalg import Vectors
 from pyspark.sql.types import IntegerType
-
+from pyspark.sql.functions import monotonically_increasing_id
 
 def features_csv(x):
     result = x[5:11]
@@ -30,13 +30,12 @@ data_rdd = data.rdd
 data_rdd = data_rdd.map(lambda x: Row(label=x[0], features=Vectors.dense([x[1], x[2], x[3], x[4], x[5], x[6]])))
 
 data = spark.createDataFrame(data_rdd)
+data = data.withColumn('id', monotonically_increasing_id)
+train = data.filter(data.id < 40000)
+test = data.filter(data.id >= 40000)
 
-data.show()
-# Split the data into train and test
-(train, test) = data.randomSplit([0.8, 0.2], 123)
-
-# train.show()
-# test.show()
+train.show()
+test.show()
 
 # create the trainer and set its parameters
 nb = NaiveBayes(smoothing=0.5, modelType="multinomial")
