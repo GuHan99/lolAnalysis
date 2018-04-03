@@ -27,7 +27,7 @@ df = model.freqItemsets
 df = df.withColumn('length', size(df.items))
 df = df.filter(df.length == 2)
 df = df.filter(df.freq > 1000)
-df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq').collect()
+df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq')
 df.show()
 
 rules = model.associationRules
