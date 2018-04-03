@@ -18,13 +18,16 @@ def features_csv(x):
 spark = SparkSession.builder.master('local').appName('data').getOrCreate()
 data = spark.read.csv('games.csv', header=True)
 
-data = data.select(data['winner'].cast(IntegerType()), data['firstBlood'].cast(IntegerType()), data['firstTower'].cast(IntegerType()),
-    data['firstInhibitor'].cast(IntegerType()), data['firstBaron'].cast(IntegerType()), data['firstDragon'].cast(IntegerType()),
-    data['firstRiftHerald'].cast(IntegerType()))
+data = data.select(
+    data['winner'].cast(IntegerType()), data['firstBlood'].cast(IntegerType())
+    , data['firstTower'].cast(IntegerType())
+    , data['firstInhibitor'].cast(IntegerType()), data['firstBaron'].cast(IntegerType())
+    , data['firstDragon'].cast(IntegerType())
+    , data['firstRiftHerald'].cast(IntegerType()))
 
 data_rdd = data.rdd
 
-data_rdd = data_rdd.map(lambda x: Row(label=x[0], features=Vectors.dense(x[1], x[2], x[3],x[4], x[5], x[6])))
+data_rdd = data_rdd.map(lambda x: Row(label=x[0], features=Vectors.dense([x[1], x[2], x[3], x[4], x[5], x[6]])))
 
 data = spark.createDataFrame(data_rdd)
 
