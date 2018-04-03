@@ -44,7 +44,7 @@ predictions = model.transform(test)
 predictions.show()
 
 # compute accuracy on the test set
-evaluator = MulticlassClassificationEvaluator(labelCol="label", predictionCol="winner",
+evaluator = MulticlassClassificationEvaluator(labelCol="label", predictionCol="prediction",
                                               metricName="accuracy")
 accuracy = evaluator.evaluate(predictions)
 print("Test set accuracy = " + str(accuracy))
