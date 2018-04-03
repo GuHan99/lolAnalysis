@@ -24,10 +24,28 @@ data = data.select(
     , data['firstInhibitor'].cast(IntegerType()), data['firstBaron'].cast(IntegerType())
     , data['firstDragon'].cast(IntegerType())
     , data['firstRiftHerald'].cast(IntegerType()))
+data = data.withColumn('towerkill', data['t1_towerKills']-data['t2_towerKills'])
+data = data.withColumn('inhibitorkill', data['t1_inhibitorKills']-data['t2_inhibitorKills'])
+data = data.withColumn('baronkill', data['t1_baronKills']-data['t2_baronKills'])
+data = data.withColumn('dragonkill', data['t1_dragonKills']-data['t2_dragonKills'])
+data = data.withColumn('riftkill', data['t1_riftHeraldKills']-data['t2_riftHeraldKills'])
+data = data.select(
+    data['winner'], data['firstBlood']
+    , data['firstTower']
+    , data['firstInhibitor'], data['firstBaron']
+    , data['firstDragon']
+    , data['firstRiftHerald']
+    , data['towerkill'].cast(IntegerType())
+    , data['inhibitorkill'].cast(IntegerType())
+    , data['baronkill'].cast(IntegerType())
+    , data['dragonkill'].cast(IntegerType())
+    , data['riftkill'].cast(IntegerType())
+)
+
 
 data_rdd = data.rdd
 
-data_rdd = data_rdd.map(lambda x: Row(label=x[0], features=Vectors.dense([x[1], x[2], x[3], x[4], x[5], x[6]])))
+data_rdd = data_rdd.map(lambda x: Row(label=x[0], features=Vectors.dense(x[1:12])))
 
 data = spark.createDataFrame(data_rdd)
 data = data.withColumn('id', monotonically_increasing_id())
