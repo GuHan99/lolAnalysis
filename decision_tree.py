@@ -2,10 +2,24 @@ from pyspark.ml import Pipeline
 from pyspark.ml.classification import DecisionTreeClassifier
 from pyspark.ml.feature import StringIndexer, VectorIndexer
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+from pyspark.sql import SparkSession, Row
+from pyspark.sql.types import IntegerType
 
+
+spark = SparkSession.builder.master('local').appName('data').getOrCreate()
 # Load the data stored in LIBSVM format as a DataFrame.
-data = spark.read.format("libsvm").load("data/mllib/sample_libsvm_data.txt")
-
+data = spark.read.csv('games.csv', header=True)
+data = data.select(
+    data['winner'].cast(IntegerType()), data['firstBlood'].cast(IntegerType())
+    , data['firstTower'].cast(IntegerType())
+    , data['firstInhibitor'].cast(IntegerType()), data['firstBaron'].cast(IntegerType())
+    , data['firstDragon'].cast(IntegerType())
+    , data['firstRiftHerald'].cast(IntegerType()))
+data = data.withColumn('towerkill', data['t1_towerKills']-data['t2_towerKills'])
+data = data.withColumn('inhibitorkill', data['t1_inhibitorKills']-data['t2_inhibitorKills'])
+data = data.withColumn('baronkill', data['t1_baronKills']-data['t2_baronKills'])
+data = data.withColumn('dragonkill', data['t1_dragonKills']-data['t2_dragonKills'])
+data = data.withColumn('riftkill', data['t1_riftHeraldKills']-data['t2_riftHeraldKills'])
 # Index labels, adding metadata to the label column.
 # Fit on whole dataset to include all labels in index.
 labelIndexer = StringIndexer(inputCol="label", outputCol="indexedLabel").fit(data)
