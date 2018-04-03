@@ -32,16 +32,9 @@ data = data.select(
 
 )
 
-
-assembler = VectorAssembler(
-    inputCols=['firstBlood', 'firstTower', 'firstInhibitor', 'firstBaron', 'firstDragon',
-               'firstRiftHerald', 'towerkill', 'inhibitorkill', 'baronkill', 'dragonkill', 'riftkill'],
-    outputCol="features")
-output = assembler.transform(data)
-
 data_rdd = data.rdd
 
-data_rdd = data_rdd.map(lambda x: Row(label=x[0], features='features'))
+data_rdd = data_rdd.map(lambda x: Row(label=x[0], features=Vectors.dense(x[1:12])))
 
 data = spark.createDataFrame(data_rdd)
 data = data.withColumn('id', monotonically_increasing_id())
