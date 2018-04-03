@@ -16,19 +16,19 @@ def features_csv(x):
 
 
 spark = SparkSession.builder.master('local').appName('data').getOrCreate()
-data = spark.read.csv('games.csv', header=True)
+data_o = spark.read.csv('games.csv', header=True)
 
-data = data.select(
-    data['winner'].cast(IntegerType()), data['firstBlood'].cast(IntegerType())
-    , data['firstTower'].cast(IntegerType())
-    , data['firstInhibitor'].cast(IntegerType()), data['firstBaron'].cast(IntegerType())
-    , data['firstDragon'].cast(IntegerType())
-    , data['firstRiftHerald'].cast(IntegerType()))
-data = data.withColumn('towerkill', data['t1_towerKills']-data['t2_towerKills'])
-data = data.withColumn('inhibitorkill', data['t1_inhibitorKills']-data['t2_inhibitorKills'])
-data = data.withColumn('baronkill', data['t1_baronKills']-data['t2_baronKills'])
-data = data.withColumn('dragonkill', data['t1_dragonKills']-data['t2_dragonKills'])
-data = data.withColumn('riftkill', data['t1_riftHeraldKills']-data['t2_riftHeraldKills'])
+data = data_o.select(
+    data_o['winner'].cast(IntegerType()), data_o['firstBlood'].cast(IntegerType())
+    , data_o['firstTower'].cast(IntegerType())
+    , data_o['firstInhibitor'].cast(IntegerType()), data_o['firstBaron'].cast(IntegerType())
+    , data_o['firstDragon'].cast(IntegerType())
+    , data_o['firstRiftHerald'].cast(IntegerType()))
+data = data.withColumn('towerkill', data_o['t1_towerKills']-data_o['t2_towerKills'])
+data = data.withColumn('inhibitorkill', data_o['t1_inhibitorKills']-data_o['t2_inhibitorKills'])
+data = data.withColumn('baronkill', data_o['t1_baronKills']-data_o['t2_baronKills'])
+data = data.withColumn('dragonkill', data_o['t1_dragonKills']-data_o['t2_dragonKills'])
+data = data.withColumn('riftkill', data_o['t1_riftHeraldKills']-data_o['t2_riftHeraldKills'])
 data = data.select(
     data['winner'], data['firstBlood']
     , data['firstTower']
