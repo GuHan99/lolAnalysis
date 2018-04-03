@@ -34,7 +34,7 @@ data = spark.createDataFrame(data_rdd)
 data.show()
 
 # Split the data into train and test
-splits = data.randomSplit([0.6, 0.4], 1234)
+splits = data.randomSplit([0.6, 0.4], 123)
 train = splits[0]
 test = splits[1]
 
