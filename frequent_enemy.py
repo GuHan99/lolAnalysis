@@ -38,15 +38,11 @@ df = model.freqItemsets
 df = df.withColumn('length', size(df.items))
 df = df.filter(df.length == 2)
 df = df.filter(df.freq > 500)
-df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq').collect()
-for i in df:
-    print(i)
+df = df.orderBy(df.length.asc(), df.freq.desc()).select('items', 'freq').show()
+
 
 rules = model.associationRules
 
 rules = rules.withColumn('length', size(rules.antecedent))
 rules = rules.orderBy(rules.length.desc(), rules.confidence.desc()).select('antecedent', 'consequent', 'confidence')
-rules = rules.collect()
-
-for i in rules:
-    print(i)
+rules = rules.show()
