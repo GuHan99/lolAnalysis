@@ -31,12 +31,13 @@ data_rdd = data_rdd.map(lambda x: Row(label=x[0], features=Vectors.dense([x[1], 
 
 data = spark.createDataFrame(data_rdd)
 
-data.show()
-
 # Split the data into train and test
 splits = data.randomSplit([0.6, 0.4], 123)
 train = splits[0]
 test = splits[1]
+
+train.show()
+test.show()
 
 # create the trainer and set its parameters
 nb = NaiveBayes(smoothing=0.5, modelType="multinomial")
@@ -46,7 +47,7 @@ model = nb.fit(train)
 
 # select example rows to display.
 predictions = model.transform(test)
-predictions.show()
+# predictions.show()
 
 # compute accuracy on the test set
 evaluator = MulticlassClassificationEvaluator(labelCol="label", predictionCol="prediction",
