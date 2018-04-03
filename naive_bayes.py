@@ -30,7 +30,7 @@ data_rdd = data.rdd
 data_rdd = data_rdd.map(lambda x: Row(label=x[0], features=Vectors.dense([x[1], x[2], x[3], x[4], x[5], x[6]])))
 
 data = spark.createDataFrame(data_rdd)
-data = data.withColumn('id', monotonically_increasing_id)
+data = data.withColumn('id', monotonically_increasing_id())
 train = data.filter(data.id < 40000)
 test = data.filter(data.id >= 40000)
 
