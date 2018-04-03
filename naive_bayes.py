@@ -12,11 +12,11 @@ maturity_udf = udf(lambda x: x, IntegerType())
 spark = SparkSession.builder.master('local').appName('data').getOrCreate()
 data = spark.read.csv('games.csv', header=True)
 
-data = data.withColumn('towerkill', data.t1_towerKills-data.t2_towerKills)
-data = data.withColumn('inhibitorkill', maturity_udf(data['t1_inhibitorKills']-data['t2_inhibitorKills']))
-data = data.withColumn('baronkill', maturity_udf(data['t1_baronKills']-data['t2_baronKills']))
-data = data.withColumn('dragonkill', maturity_udf(data['t1_dragonKills']-data['t2_dragonKills']))
-data = data.withColumn('riftkill', maturity_udf(data['t1_riftHeraldKills']-data['t2_riftHeraldKills']))
+# data = data.withColumn('towerkill', data.t1_towerKills-data.t2_towerKills)
+# data = data.withColumn('inhibitorkill', maturity_udf(data['t1_inhibitorKills']-data['t2_inhibitorKills']))
+# data = data.withColumn('baronkill', maturity_udf(data['t1_baronKills']-data['t2_baronKills']))
+# data = data.withColumn('dragonkill', maturity_udf(data['t1_dragonKills']-data['t2_dragonKills']))
+# data = data.withColumn('riftkill', maturity_udf(data['t1_riftHeraldKills']-data['t2_riftHeraldKills']))
 
 data = data.select(
     data['winner'].cast(IntegerType()), data['firstBlood'].cast(IntegerType())
@@ -24,11 +24,11 @@ data = data.select(
     , data['firstInhibitor'].cast(IntegerType()), data['firstBaron'].cast(IntegerType())
     , data['firstDragon'].cast(IntegerType())
     , data['firstRiftHerald'].cast(IntegerType())
-    , data['towerkill'].cast(IntegerType())
-    , data['inhibitorkill'].cast(IntegerType())
-    , data['baronkill'].cast(IntegerType())
-    , data['dragonkill'].cast(IntegerType())
-    , data['riftkill'].cast(IntegerType())
+    # , data['towerkill'].cast(IntegerType())
+    # , data['inhibitorkill'].cast(IntegerType())
+    # , data['baronkill'].cast(IntegerType())
+    # , data['dragonkill'].cast(IntegerType())
+    # , data['riftkill'].cast(IntegerType())
 
 )
 
