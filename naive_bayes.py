@@ -18,7 +18,7 @@ data = data_o.select(
     , data_o['firstInhibitor'].cast(IntegerType()), data_o['firstBaron'].cast(IntegerType())
     , data_o['firstDragon'].cast(IntegerType())
     , data_o['firstRiftHerald'].cast(IntegerType()))
-data = data.withColumn('towerkill', maturity_udf(data_o['t1_towerKills']-data_o['t2_towerKills']))
+data = data.withColumn('towerkill', maturity_udf(data_o.t1_towerKills-data_o.t2_towerKills))
 data = data.withColumn('inhibitorkill', maturity_udf(data_o['t1_inhibitorKills']-data_o['t2_inhibitorKills']))
 data = data.withColumn('baronkill', maturity_udf(data_o['t1_baronKills']-data_o['t2_baronKills']))
 data = data.withColumn('dragonkill', maturity_udf(data_o['t1_dragonKills']-data_o['t2_dragonKills']))
