@@ -14,9 +14,10 @@ data = data.withColumn('inhibitorkill', data.t1_inhibitorKills-data.t2_inhibitor
 data = data.withColumn('baronkill', data.t1_baronKills-data.t2_baronKills+20)
 data = data.withColumn('dragonkill', data.t1_dragonKills-data.t2_dragonKills+20)
 data = data.withColumn('riftkill', data.t1_riftHeraldKills-data.t2_riftHeraldKills+20)
+data = data.withColumn('t-winner', data.winner-1)
 
 data = data.select(
-    data['winner'].cast(DoubleType()), data['firstBlood'].cast(IntegerType())
+    data['t-winner'].cast(DoubleType()), data['firstBlood'].cast(IntegerType())
     , data['firstTower'].cast(IntegerType())
     , data['firstInhibitor'].cast(IntegerType()), data['firstBaron'].cast(IntegerType())
     , data['firstDragon'].cast(IntegerType())
