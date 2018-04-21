@@ -25,12 +25,18 @@ d_split = d_split.filter(lambda x: x[0] != 'gameId')
 d_frame = d_split.map(lambda x: Row(id=x[0], items=x[11:30][:15:3], winner=win_1(x)))
 d_frame_2 = d_split.map(lambda x: Row(id=x[0], items=x[36:50][:15:3], winner=win_2(x)))
 
-champion = ['497', '498', '18', '412', '67', '40', '141']
+champion = ['497', '498', '18', '412', '67', '40', '141', '64', '29', '117']
 combination = [['497', '498'],
                ['18', '412'],
                ['412', '67'],
                ['40', '18'],
-               ['141', '18']]
+               ['141', '18'],
+               ['64', '18'],
+               ['29', '412'],
+               ['40', '67'],
+               ['141', '67'],
+               ['117', '18']
+               ]
 
 spark = SparkSession.builder.appName('data').getOrCreate()
 df_1 = spark.createDataFrame(d_frame)
