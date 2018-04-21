@@ -38,6 +38,8 @@ df_2 = spark.createDataFrame(d_frame_2)
 
 df = df_1.union(df_2).collect()
 
+for i in df:
+    print(i['winner'])
 for i in champion:
     term = df
     term = list(filter(lambda x: i in x['items'], term))
