@@ -36,7 +36,7 @@ spark = SparkSession.builder.appName('data').getOrCreate()
 df_1 = spark.createDataFrame(d_frame)
 df_2 = spark.createDataFrame(d_frame_2)
 
-df = df_1.union(df_2).collect
+df = list(df_1.union(df_2).collect)
 
 for i in champion:
     term = df
