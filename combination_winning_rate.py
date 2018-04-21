@@ -42,7 +42,9 @@ for i in champion:
     term = df
     term = list(filter(lambda x: i in x['items'], term))
     bottom = len(term)
+    print(bottom)
     up = len(list(filter(lambda x: x['winner'] is 1, term)))
+    print(up)
     result = up/bottom
     print('winning rate of %s is %f' % (i, result))
 
