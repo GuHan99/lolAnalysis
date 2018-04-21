@@ -43,7 +43,6 @@ for i in champion:
     term = list(filter(lambda x: i in x['items'], term))
     bottom = len(term)
     up = len(list(filter(lambda x: x['winner'] == 1.0, term)))
-    print(up)
     result = up/bottom
     print('winning rate of %s is %f' % (i, result))
 
