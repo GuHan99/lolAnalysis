@@ -21,6 +21,7 @@ def win_2(row):
 
 
 d_split = rdd.map(lambda x: x.split(','))
+d_split = d_split.filter(lambda x: x[0] != 'gameId')
 d_frame = d_split.map(lambda x: Row(id=x[0], items=x[11:30][:15:3], winner=win_1(x)))
 d_frame_2 = d_split.map(lambda x: Row(id=x[0], items=x[36:50][:15:3], winner=win_2(x)))
 
